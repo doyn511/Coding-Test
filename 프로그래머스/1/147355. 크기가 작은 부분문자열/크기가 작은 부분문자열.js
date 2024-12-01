@@ -3,9 +3,9 @@ function solution(t, p) {
     let cnt = 0;
     
     for(let i = 0; i <= t.length-len; i++){
-        const num = t.split('').slice(i,i+len).join('');
+        const num = t.slice(i,i+len);
         
-        if(num <= p) cnt++;
+        if(Number(num) <= Number(p)) cnt++;
     }
     
     return cnt;
