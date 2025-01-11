@@ -1,29 +1,24 @@
+/** 풀이 방법
+1. lost, reserve 중복값 없애기 (도난당했지만 여벌이 있는 경우)
+// 정렬하기 (lost, reserve 모두)
+2. answer = n - realLost.length (전체 학생수 - 실제 잃어버린 사람 수)
+3. realLost에 있는 학생 앞 뒤의 학생이 realReserve에 있는지 확인 
+4. 있다면 realReserve에 있는 해당 학생 빼고 필터링해서 새 배열 반환 + realLost에 있는 값 없애기*/
 function solution(n, lost, reserve) {
-    var answer = n-lost.length;
-    // 처음 가능한 학생수 = n - lost.length
-    // lost 배열 앞뒤의 값을 reserve에 포함되어있는지를 확인 -> 해당값을 reserve에서 뺌 + answer++
-    // 왜 정렬을 해줘야 하지? - [4,2], [3,5]와 같은 케이스 때문
+   let realLost = lost.filter((std) => !reserve.includes(std)).sort((a,b) => a-b);
+    let realReserve = reserve.filter((std) => !lost.includes(std)).sort((a,b) => a-b);
     
-    let realLost=lost.filter((l)=>!reserve.includes(l));
-    let realReserve=reserve.filter((r)=>!lost.includes(r));
-    answer+=lost.length-realLost.length;
+    let answer = n - realLost.length;
     
-    realLost.sort((a,b)=>a-b);
-    
-    realLost.forEach((l)=>{
-        if(realReserve.length===0){
-            return;
-        }
-        
-        if(realReserve.includes(l-1)){
-            realReserve=realReserve.filter((r)=>r!==l-1);
+    for(const std of realLost){
+        if(realReserve.includes(std-1)){
+            realReserve = realReserve.filter((r) => r !== std-1);
+            answer++;
+        }else if(realReserve.includes(std+1)){
+            realReserve = realReserve.filter((r) => r !== std+1);
             answer++;
         }
-        else if(realReserve.includes(l+1)){
-            realReserve=realReserve.filter((r)=>r!==l+1);
-            answer++;
-        }
-        
-    })
+    }
+    
     return answer;
 }
