@@ -1,27 +1,30 @@
 const fs = require("fs");
-let input = fs.readFileSync(0).toString().trim().split("\n");
+let [num, input] = fs
+  .readFileSync(0)
+  .toString()
+  .trim()
+  .split("\n")
+  .map((el) => el.split(" ").map(Number));
 
-const [numCnt, selectNum] = input.shift().split(" ").map(Number);
-input = input[0]
-  .split(" ")
-  .map(Number)
-  .sort((a, b) => a - b);
+input.sort((a, b) => a - b);
 
-const getCombination = (arr, n) => {
-  if (n === 1) return arr.map((el) => [el]);
-  const res = [];
+const answer = [];
 
-  arr.forEach((fixed, _, origin) => {
-    const combis = getCombination(origin, n - 1);
-    const attatched = combis.map((el) => [fixed, ...el]);
-    res.push(...attatched);
-  });
+const dfs = (arr, depth) => {
+  if (depth === num[1]) {
+    answer.push([...arr]);
+    return;
+  }
 
-  return res;
+  for (let i = 0; i < num[0]; i++) {
+    arr.push(input[i]);
+    dfs(arr, depth + 1);
+    arr.pop();
+  }
 };
 
-const answer = getCombination(input, selectNum)
-  .map((el) => el.join(" "))
-  .join("\n");
+for (let i = 0; i < num[0]; i++) {
+  dfs([input[i]], 1);
+}
 
-console.log(answer);
+console.log(answer.map((el) => el.join(" ")).join("\n"));
