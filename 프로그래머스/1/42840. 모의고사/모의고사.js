@@ -1,26 +1,21 @@
 function solution(answers) {
-    const first = [1,2,3,4,5];
-    const second = [2,1,2,3,2,4,2,5];
-    const third = [3,3,1,1,2,2,4,4,5,5];
+    const std1 = [1,2,3,4,5];
+    const std2 = [2,1,2,3,2,4,2,5];
+    const std3 = [3,3,1,1,2,2,4,4,5,5];
     
-    const firstLen = first.length;
-    const secondLen = second.length;
-    const thirdLen = third.length;
+    const correct = [0,0,0];
     
-    let score = [{id:1, cnt:0}, {id:2, cnt:0}, {id:3, cnt:0}];
-    
-    for(let i = 0; i <= answers.length-1; i++){
-        if(answers[i] === first[ i % firstLen]) score[0].cnt++;
-        if(answers[i] === second[ i % secondLen]) score[1].cnt++;
-        if(answers[i] === third[ i % thirdLen]) score[2].cnt++;
+    for(let i = 0; i < answers.length; i++){
+        if(answers[i] === std1[i % std1.length]) correct[0]++;
+        if(answers[i] === std2[i % std2.length]) correct[1]++;
+        if(answers[i] === std3[i % std3.length]) correct[2]++;
     }
     
-    const maxScore = Math.max(score[0].cnt, score[1].cnt, score[2].cnt);
-    let answer = score.filter((item) => {
-        if(item.cnt === maxScore){
-            return item.id
-        }
-    }).map((item) => item.id);
+    const answer = [];
+    const max = Math.max(...correct);
+    correct.forEach((el, idx) => {
+        if(el === max) answer.push(idx+1);
+    })
     
     return answer;
 }
