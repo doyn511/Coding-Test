@@ -1,17 +1,19 @@
 function solution(arr1, arr2) {
     const answer = [];
     
-    for(const a1 of arr1){
-        const row = [];
+    for(let i = 0; i < arr1.length; i++){
+        const res = [];
         
         for(let j = 0; j < arr2[0].length; j++){
             let sum = 0;
+            
             for(let k = 0; k < arr2.length; k++){
-                sum += a1[k] * arr2[k][j];
+                sum += arr1[i][k] * arr2[k][j];
             }
-            row.push(sum);
+            res.push(sum);
         }
-        answer.push(row);
+        answer.push(res);
     }
+    
     return answer;
 }
