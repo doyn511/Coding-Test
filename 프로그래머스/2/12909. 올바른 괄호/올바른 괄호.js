@@ -1,12 +1,14 @@
+// Lv 2. 올바른 괄호 - 스택/큐
 function solution(s){
-    let cnt = 0;
-
-    for(let i = 0; i <=s.length-1; i++){
-        s[i] === '(' ? cnt++ : cnt--;
-        
-        if(cnt<0) return false;
+    const stack = [s[0]];
+    
+    for(let i = 1; i < s.length; i++){
+        if(stack[stack.length-1] === '(' && s[i] === ')'){
+            stack.pop();
+        }else{
+            stack.push(s[i]);
+        }
     }
     
-    return cnt === 0 ? true : false;
-    
+    return stack.length === 0 ? true : false;
 }
