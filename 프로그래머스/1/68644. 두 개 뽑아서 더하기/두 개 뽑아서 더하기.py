@@ -3,10 +3,9 @@ def solution(numbers):
     
     for i in range(len(numbers)-1):
         fixed = numbers[i]
-        rest = numbers[i+1:]
         
-        for num in rest:
-            sum = fixed + num
+        for j in range(i+1, len(numbers)):
+            sum = fixed + numbers[j]
             if(sum in answer):
                 continue
             else:
