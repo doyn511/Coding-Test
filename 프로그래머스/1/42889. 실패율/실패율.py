@@ -1,25 +1,24 @@
-# challenge : 스테이지에 도달했으나 아직 클리어하지 못한 플레이어 수
-# player : 스테이지에 도달한 플레이어 수
-def filterList(n, stages):
-    return stages
 def solution(N, stages):
     answer = []
-    failure = {}
     
-    # 스테이지에 도달한 참가자 수
-    player = len(stages)
+    # 스테이지 별 도전한 사람의 수
+    # 길이가 N+2인 이유: N번째 스테이지를 클리어한 사람의 값은 N+1임
+    # 배열은 0부터 시작하기에 N+2번째 인덱스에 저장됨
+    challenger = [0] * (N+2)
+    for stage in stages:
+        challenger[stage] += 1
     
-    # i는 stage의 단계를 의미 / stage 1부터 N까지 존재
+    fails = {}
+    total = len(stages)
+    
     for i in range(1, N+1):
-        if player != 0:
-            # 스테이지에 도달했으나 아직 클리어하지 못한 플레이어 수 (i와 같은 값의 수)
-            challenger = stages.count(i)
-            failure[i] = challenger / player
-            player -= challenger
+        if(challenger[i] != 0):
+            fails[i] = challenger[i] / total
+            total -= challenger[i]
         else:
-            failure[i] = 0
+            fails[i] = 0
     
-    # 실패율 내림차순 정렬
-    answer = sorted(failure, key = lambda x: failure[x], reverse = True)
+    # fails는 딕셔너리 형식이기에 fails[x]는 실패율을 의미함
+    answer = sorted(fails, key = lambda x: fails[x], reverse=True)
     
     return answer
