@@ -1,18 +1,16 @@
+/**
+n편 중 h번 이상 인용된 논문이 h편 이상 / 나머지 논문은 h편 이하로 인용
+-> h의 최대값이 H-index값
+*/
 function solution(citations) {
-    citations.sort((a,b) => b-a);
+    let index = 0;
+    let hIndex = 0;
     const max = Math.max(...citations);
-    let h = 0;
-    let idx = 0;
     
-    while(idx <= max){
-        const cnt = citations.filter((el) => el >= idx).length;
-        
-        if(idx <= cnt){
-            h = Math.max(h, idx);
-        }
-        
-        idx++;
+    while(index <= max){
+        const count = citations.filter((el) => el >= index).length;
+        if(count >= index) hIndex = index;
+        index++;
     }
-    
-    return h;
+    return hIndex;
 }
