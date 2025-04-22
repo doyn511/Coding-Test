@@ -1,14 +1,21 @@
 function solution(clothes) {
-    const clothesType = {};
+    const clothMap = new Map();
     let answer = 1;
     
-    for(let i = 0; i < clothes.length; i++){
-        clothesType[clothes[i][1]] = (clothesType[clothes[i][1]] || 0) + 1;
-    }
+    clothes.forEach((el) => {
+        const [name, type] = el;
+        if(clothMap.has(type)){
+            clothMap.set(type, clothMap.get(type)+1)
+
+        }else{
+            clothMap.set(type, 1);
+        }
+    })
     
-    for(const c in clothesType){
-        answer *= (clothesType[c] + 1);
-    }
+    // 각각의 옷을 입음 or 안입음 두가지 방안만이 존재함
+    clothMap.forEach((count) => answer *= (count+1));
     
-    return answer-1;
+    // 하나도 입지 않는 경우 제외하고 리턴
+    return answer - 1;
+    
 }
