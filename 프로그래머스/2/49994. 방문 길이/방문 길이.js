@@ -1,65 +1,38 @@
-/**
-[]에 [fromx, fromy, tox, toy], [tox, toy, fromx, fromy] 저장하기
--> 방향이 정해져있지 않기 때문에 이미 지나간 길임을 알기 위해서는 두가지 다 저장 필요
-
-좌표 평면의 범위를 넘어가는 명령어는 무시 (continue)
-*/
-
-/** 좌표 평면 내에 위치하는지 확인하는 함수 */
-function checkPos(pos){
-    const [x,y] = pos;
-    if(x >= -5 && y >= -5 && x <= 5 && y <= 5) return true;
-    
-    return false;
-}
-
-function getNewPos(pos, dir) {
-    let [x,y] = pos;
-    
-    switch(dir){
-        case 'U':
-            y++;
-            break;
-        case 'D':
-            y--;
-            break;
-        case 'R':
-            x++;
-            break;
-        case 'L':
-            x--;
-            break;
-    }
-    return [x,y];
-}
-
-function isExistRoute(r1, r2, arr){
-    return arr.some(route => route === r1 || route === r2);
-}
-
+/**풀이 방법
+dirs 순차적으로 돌면서 체크하기
+- 0. 새로 방문하려는 좌표가 좌표평면의 경계 안에 존재하는지 체크 (존재하지 않는다면 바로 continue)
+- 1. from, to / to, from 순으로 모두 visited에 이미 존재하는지 확인하기
+- 2. 존재하지 않는다면 ways++
+- 3. 현재 좌표 업데이트
+*/ 
 function solution(dirs) {
+    const visited = new Set();
+    let ways = 0;
     let cur = [0,0];
-    let len = 0;
-    const route = [];
     
-    for(const dir of dirs){
-        const newPos = getNewPos(cur, dir);
+
+    for(const d of dirs){
+        let newX = cur[0], newY = cur[1];
         
-        // 좌표 평면 범위를 넘어가는 경우 패스
-        if(!checkPos(newPos)) {
+        // 새 좌표 구하기
+        if(d === 'U') newY += 1;
+        if(d === 'D') newY -= 1;
+        if(d === 'R') newX += 1;
+        if(d === 'L') newX -= 1;
+        
+        // 좌표 평면 내에 존재하는지 확인
+        if(newX < -5 || newX > 5 || newY < -5 || newY > 5){
             continue;
         }
         
-        const route1 = cur.join('') + newPos.join('');
-        const route2 = newPos.join('') + cur.join('');
-    
-        if(!isExistRoute(route1, route2, route)){
-            route.push(route1, route2);
-            len++;
-        }
-        // 겹치는 루트가 있더라도 일단 움직이고 len 증가X
-        cur = newPos;
+        // 이미 방문한 루트인지 확인
+        if(!visited.has([...cur, newX, newY].join('')) && !visited.has([newX, newY, ...cur].join(''))) ways++;
+        
+        visited.add([...cur, newX, newY].join(''));
+        visited.add([newX, newY, ...cur].join(''));
+        
+        cur = [newX, newY];
     }
     
-    return len;
+    return ways;
 }
