@@ -1,12 +1,10 @@
-/**
-1. 현재의 word가 숫자인지 아닌지 체크
-*/
 function solution(dartResult) {
     let cur = '';
     let idx = 0;
     const score = [];
     
     while(idx < dartResult.length){
+        // 숫자일 경우 (0 ~ 10 사이이므로 두자릿수도 가능)
         if(!isNaN(dartResult[idx])){
             cur += dartResult[idx];
         }else{
