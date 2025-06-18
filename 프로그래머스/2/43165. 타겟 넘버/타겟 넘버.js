@@ -1,15 +1,17 @@
 function solution(numbers, target) {
     let answer = 0;
     
-    const dfs = (idx, sum) => {
-        if(idx === numbers.length){
-            if(sum === target) answer ++;
-            return;
+    const findTarget = (sum, dep) => {
+        if(dep === numbers.length){
+            if(sum === target) answer++;
+            return ;
         }
-        dfs(idx+1, sum+numbers[idx]);
-        dfs(idx+1, sum-numbers[idx]);
+        
+        findTarget(sum+numbers[dep], dep+1);
+        findTarget(sum-numbers[dep], dep+1);
     }
     
-    dfs(0,0);
+    findTarget(0, 0);
+    
     return answer;
 }
