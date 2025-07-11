@@ -27,37 +27,31 @@ function solution(friends, gifts) {
     })
     
     // 다음 달 받을 선물의 수 계산
-    for (let i = 0; i < friends.length; i++) {
-        for (let j = i + 1; j < friends.length; j++) {
-            const friend1 = friends[i];
-            const friend2 = friends[j];
-            
-            // friend1이 friend2에게 준 선물 개수
-            const friend1ToFriend2 = giveGiftMap.get(friend1).filter(name => name === friend2).length;
-            // friend2가 friend1에게 준 선물 개수
-            const friend2ToFriend1 = giveGiftMap.get(friend2).filter(name => name === friend1).length;
-            
-            if (friend1ToFriend2 > friend2ToFriend1) {
-                // friend1이 더 많이 줬으면 friend1이 받음
-                nextMonthGetCnt.set(friend1, nextMonthGetCnt.get(friend1) + 1);
-            } else if (friend2ToFriend1 > friend1ToFriend2) {
-                // friend2가 더 많이 줬으면 friend2가 받음
-                nextMonthGetCnt.set(friend2, nextMonthGetCnt.get(friend2) + 1);
-            } else {
-                // 주고받은 수가 같거나 둘 다 0이면 선물지수 비교
-                const friend1Percent = giftPercent.get(friend1);
-                const friend2Percent = giftPercent.get(friend2);
+    for(let i = 0; i < friends.length; i++){
+        for(let j = i+1; j < friends.length; j++){
+            const p1 = friends[i];
+            const p2 = friends[j];
+            const p1_p2 = giveGiftMap.get(p1).filter((el) => el === p2).length; // p1이 p2에게 준 횟수
+            const p2_p1 = giveGiftMap.get(p2).filter((el) => el === p1).length; // p2가 p1에게 준 횟수
+            // 주고 받은 선물 횟수가 더 큰 사람에게 선물 주기
+            if(p1_p2 > p2_p1) {
+                nextMonthGetCnt.set(p1, nextMonthGetCnt.get(p1)+1);
+            } else if (p1_p2 < p2_p1){
+                nextMonthGetCnt.set(p2, nextMonthGetCnt.get(p2)+1);
+            } else { 
+                // 주고 받은 선물 횟수가 없거나 같은 경우
+                const p1Percent = giftPercent.get(p1);
+                const p2Percent = giftPercent.get(p2);
                 
-                if (friend1Percent > friend2Percent) {
-                    nextMonthGetCnt.set(friend1, nextMonthGetCnt.get(friend1) + 1);
-                } else if (friend2Percent > friend1Percent) {
-                    nextMonthGetCnt.set(friend2, nextMonthGetCnt.get(friend2) + 1);
+                // 선물 지수 비교 후 더 큰 사람에게 선물 주기
+                if(p1Percent > p2Percent) {
+                    nextMonthGetCnt.set(p1, nextMonthGetCnt.get(p1)+1);
+                }else if(p1Percent < p2Percent){
+                    nextMonthGetCnt.set(p2, nextMonthGetCnt.get(p2)+1);
                 }
-                // 선물지수도 같으면 아무도 선물을 주지 않음
             }
         }
     }
     
-    // 가장 많이 받을 선물의 수 반환
-    return Math.max(...nextMonthGetCnt.values());
+    return (Math.max(...nextMonthGetCnt.values()));
 }
