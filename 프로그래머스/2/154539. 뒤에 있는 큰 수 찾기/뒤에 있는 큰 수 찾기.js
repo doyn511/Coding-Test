@@ -1,6 +1,3 @@
-/**
-
-*/
 function solution(numbers) {
     const answer = [];
     let stack = [];
